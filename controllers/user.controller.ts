@@ -45,10 +45,6 @@ export const registrationUser = CatchAsyncError(
       const activationCode = activationToken.activationCode;
 
       const data = { user: { name: user.name }, activationCode };
-      const html = await ejs.renderFile(
-        path.join(__dirname, "../mails/activation-mail.ejs"),
-        data
-      );
 
       try {
         await sendMail({
@@ -64,9 +60,11 @@ export const registrationUser = CatchAsyncError(
           activationToken: activationToken.token,
         });
       } catch (error: any) {
+        console.log(error)
         return next(new ErrorHandler(error.message, 400));
       }
     } catch (error: any) {
+      console.log(error)
       return next(new ErrorHandler(error.message, 400));
     }
   }
@@ -103,6 +101,7 @@ interface IActivationRequest {
 export const activateUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log("called")
       const { activation_token, activation_code } =
         req.body as IActivationRequest;
 
@@ -111,6 +110,7 @@ export const activateUser = CatchAsyncError(
         process.env.ACTIVATION_SECRET as string
       ) as { user: IUser; activationCode: string };
 
+      console.log(newUser)
       if (newUser.activationCode !== activation_code) {
         return next(new ErrorHandler("Invalid activation code", 400));
       }
