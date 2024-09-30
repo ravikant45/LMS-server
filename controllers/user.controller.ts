@@ -101,7 +101,6 @@ interface IActivationRequest {
 export const activateUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log("called")
       const { activation_token, activation_code } =
         req.body as IActivationRequest;
 
@@ -230,6 +229,7 @@ export const getUserInfo = CatchAsyncError(
       const userId = req.user?._id;
       getUserById(userId, res);
     } catch (error: any) {
+      console.log(error)
       return next(new ErrorHandler(error.message, 400));
     }
   }

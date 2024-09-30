@@ -22,7 +22,7 @@ export const isAutheticated = CatchAsyncError(
     // check if the access token is expired
     if (decoded.exp && decoded.exp <= Date.now() / 1000) {
       try {
-        await updateAccessToken(req, res, next);
+        updateAccessToken(req, res, next);
       } catch (error) {
         return next(error);
       }
